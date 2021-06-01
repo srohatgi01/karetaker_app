@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "750187301591",
+    "project_id": "test-app-40406",
+    "storage_bucket": "test-app-40406.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750187301591:android:a2406004160975fa35fe92",
+        "android_client_info": {
+          "package_name": "com.example.karetaker_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750187301591-q2uirpg3dk3qq95e2notkv4shepce3rc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgaghKdwu_sPChGPo0Y8FmFOVscuxER6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750187301591-q2uirpg3dk3qq95e2notkv4shepce3rc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
