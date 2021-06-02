@@ -17,23 +17,53 @@ class _GoogleAuthState extends State<GoogleAuth> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        child: ElevatedButton(
-          child: Text(
-            'Google Sign In',
-            style: TextStyle(fontSize: 20),
-          ),
-          onPressed: () async {
-            GoogleUser googleUser = await _auth.signIn();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Provider<GoogleUser>(
-                  create: (context) => googleUser,
-                  child: MainPage(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/icons/logo.png', height: 200),
+            InkWell(
+              onTap: () async {
+                GoogleUser googleUser = await _auth.signIn();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Provider<GoogleUser>(
+                      create: (context) => googleUser,
+                      child: MainPage(),
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 1.0), //(x,y)
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(50)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/google.png',
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text('Sign In with Google', style: TextStyle(fontSize: 18))
+                  ],
                 ),
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
