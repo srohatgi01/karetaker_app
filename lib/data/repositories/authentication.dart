@@ -1,8 +1,12 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:karetaker/constants/strings.dart';
 import 'package:karetaker/data/models/googleuser.dart';
+import 'package:karetaker/data/provider/user_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/user.dart' as CustomUser;
+import 'package:http/http.dart' as http;
 
 class Auth {
   GoogleSignIn googleSignIn = GoogleSignIn();
@@ -58,9 +62,43 @@ class Auth {
       print(googleUser.emailAddress);
       print(googleUser.uuid);
       print(googleUser.photoUrl);
+
+      // bool newUser = await createUserInDatabase(
+      //   CustomUser.User(
+      //     emailAddress: googleUser.emailAddress,
+      //     firstName: googleUser.firstName,
+      //     lastName: googleUser.lastName,
+      //     uuid: googleUser.uuid,
+      //   ),
+      // );
+
+      // var authObject = {'googleUser': googleUser, 'newUser': newUser};
+      // return authObject;
       return googleUser;
     } else {
       print("Not initialized");
+    }
+  }
+
+  createUserInsideDatabase(GoogleUser googleUser) async {
+    CustomUser.User user = CustomUser.User(
+      emailAddress: googleUser.emailAddress,
+      firstName: googleUser.firstName,
+      lastName: googleUser.lastName,
+      uuid: googleUser.uuid,
+    );
+
+    var json = user.toRawJson();
+
+    var statusCode =
+        await UserApi().fetchUser(emailAddress: user.emailAddress!);
+
+    if (statusCode == 404) {
+      await UserApi().postUser(json: json);
+      print("User created");
+      return true;
+    } else {
+      return false;
     }
   }
 

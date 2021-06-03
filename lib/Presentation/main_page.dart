@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:karetaker/Presentation/nav/appointments.dart';
-import 'package:karetaker/Presentation/nav/blogs.dart';
-import 'package:karetaker/Presentation/nav/home.dart';
-import 'package:karetaker/Presentation/nav/profile.dart';
-import 'package:karetaker/Presentation/nav/services.dart';
+import 'package:karetaker/presentation/nav/home.dart';
+import 'nav/appointments.dart';
+import 'nav/blogs.dart';
+import 'nav/profile.dart';
+import 'nav/services.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -11,6 +11,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  @override
+  initState() {
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {

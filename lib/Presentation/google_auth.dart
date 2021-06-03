@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/data/models/googleuser.dart';
+import 'package:karetaker/data/repositories/authentication.dart';
 import 'package:provider/provider.dart';
-import '../data/Repositories/authentication.dart';
+import 'get_contact_details.dart';
 import 'main_page.dart';
 
 class GoogleAuth extends StatefulWidget {
@@ -25,12 +26,15 @@ class _GoogleAuthState extends State<GoogleAuth> {
             InkWell(
               onTap: () async {
                 GoogleUser googleUser = await _auth.signIn();
+                bool isNewUser =
+                    await _auth.createUserInsideDatabase(googleUser);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Provider<GoogleUser>(
                       create: (context) => googleUser,
-                      child: MainPage(),
+                      child:
+                          isNewUser == true ? GetContactDetails() : MainPage(),
                     ),
                   ),
                 );
