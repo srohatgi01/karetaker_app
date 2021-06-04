@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/data/models/googleuser.dart';
+import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/authentication.dart';
 import 'package:provider/provider.dart';
 import '../google_auth.dart';
@@ -7,6 +8,7 @@ import '../google_auth.dart';
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // User user = Provider.of<User>(context);
     GoogleUser googleUser = Provider.of<GoogleUser>(context);
     Auth _auth = Auth();
 
@@ -87,7 +89,43 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       Text(
+                //         "Number - ",
+                //         style: TextStyle(
+                //             fontWeight: FontWeight.bold, fontSize: 18),
+                //       ),
+                //       Text(
+                //         user.phoneNumber!,
+                //         style: TextStyle(fontSize: 18),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //     mainAxisSize: MainAxisSize.min,
+                //     children: [
+                //       Text(
+                //         "Gender - ",
+                //         style: TextStyle(
+                //             fontWeight: FontWeight.bold, fontSize: 18),
+                //       ),
+                //       Text(
+                //         user.gender!,
+                //         style: TextStyle(fontSize: 18),
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             )),
             Expanded(

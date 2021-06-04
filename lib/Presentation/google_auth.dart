@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/data/models/googleuser.dart';
+import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/authentication.dart';
 import 'package:provider/provider.dart';
 import 'get_contact_details.dart';
@@ -27,7 +28,7 @@ class _GoogleAuthState extends State<GoogleAuth> {
               onTap: () async {
                 GoogleUser googleUser = await _auth.signIn();
                 bool isNewUser =
-                    await _auth.createUserInsideDatabase(googleUser);
+                    await _auth.isNewUser(googleUser.emailAddress!);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

@@ -6,13 +6,18 @@ class GoogleUser {
   final String? emailAddress;
   final String? uuid;
   final String? photoUrl;
+  late final String? gender;
+  late final String? phoneNumber;
 
-  GoogleUser(
-      {this.firstName,
-      this.lastName,
-      this.emailAddress,
-      this.uuid,
-      this.photoUrl});
+  GoogleUser({
+    this.firstName,
+    this.lastName,
+    this.emailAddress,
+    this.uuid,
+    this.photoUrl,
+    this.gender,
+    this.phoneNumber,
+  });
 
   factory GoogleUser.fromGoogle(User user) => GoogleUser(
       firstName: user.displayName!.split(" ")[0],
@@ -22,11 +27,21 @@ class GoogleUser {
       photoUrl: user.photoURL);
 
   factory GoogleUser.fromLocal(
-          String firstName, lastName, emailAddress, uuid, photoUrl) =>
+    firstName,
+    lastName,
+    emailAddress,
+    uuid,
+    photoUrl,
+    gender,
+    phoneNumber,
+  ) =>
       GoogleUser(
-          firstName: firstName,
-          lastName: lastName,
-          emailAddress: emailAddress,
-          photoUrl: photoUrl,
-          uuid: uuid);
+        firstName: firstName,
+        lastName: lastName,
+        emailAddress: emailAddress,
+        photoUrl: photoUrl,
+        uuid: uuid,
+        gender: gender,
+        phoneNumber: phoneNumber,
+      );
 }

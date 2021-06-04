@@ -23,9 +23,12 @@ void main() async {
   String? lastName = prefs.getString('last_name') ?? 'Didn\'t get Last Name';
   String? uuid = prefs.getString('uuid') ?? 'Didn\'t get UUID';
   String? photoUrl = prefs.getString('photoUrl') ?? 'Didn\'t get Photo Url';
+  String? gender = prefs.getString('gender') ?? 'Didn\'t get Photo Url';
+  String? phoneNumber =
+      prefs.getString('phoneNumber') ?? 'Didn\'t get Photo Url';
 
-  GoogleUser googleUser =
-      GoogleUser.fromLocal(firstName, lastName, emailAddress, uuid, photoUrl);
+  GoogleUser googleUser = GoogleUser.fromLocal(
+      firstName, lastName, emailAddress, uuid, photoUrl, gender, phoneNumber);
 
   runApp(
     MaterialApp(

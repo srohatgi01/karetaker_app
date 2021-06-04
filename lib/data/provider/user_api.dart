@@ -9,24 +9,23 @@ class UserApi {
       if (response.statusCode == 200) {
         print('response - User Found in Database');
       } else if (response.statusCode == 404) {
-        return response.statusCode;
+        print('Response - User not found in Database');
       }
+      return response;
     } on Exception catch (e) {
       print('error - ' + e.toString());
     }
   }
 
-  postUser({required json}) async {
+  createUser({required json}) async {
     try {
-      var response = await http.post(
-        Uri.parse('$BASE_URL/users'),
-        body: json,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      print('\n\nUser created Successfully: ' + response.body + '\n\n');
-      print('\n\nResponse Code : ' + response.statusCode.toString() + '\n\n');
+      var response = await http.post(Uri.parse('$BASE_URL/users'),
+          body: json,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+      print('\n\nUser created Successfully');
+      return response;
     } on Exception catch (e) {
       print('error - ' + e.toString());
     }
