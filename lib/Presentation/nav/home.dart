@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/constants/strings.dart';
-import 'package:karetaker/data/models/googleuser.dart';
+import 'package:karetaker/data/models/user.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
               ),
               Text(
                 'Welcome back ' +
-                    Provider.of<GoogleUser>(context).firstName.toString() +
+                    Provider.of<User>(context).firstName.toString() +
                     ',',
                 style: TextStyle(fontSize: 26),
               ),

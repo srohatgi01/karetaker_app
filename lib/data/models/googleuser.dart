@@ -6,8 +6,6 @@ class GoogleUser {
   final String? emailAddress;
   final String? uuid;
   final String? photoUrl;
-  late final String? gender;
-  late final String? phoneNumber;
 
   GoogleUser({
     this.firstName,
@@ -15,8 +13,6 @@ class GoogleUser {
     this.emailAddress,
     this.uuid,
     this.photoUrl,
-    this.gender,
-    this.phoneNumber,
   });
 
   factory GoogleUser.fromGoogle(User user) => GoogleUser(
@@ -26,7 +22,7 @@ class GoogleUser {
       uuid: user.uid,
       photoUrl: user.photoURL);
 
-  factory GoogleUser.fromLocal(
+  factory GoogleUser.fromLocal({
     firstName,
     lastName,
     emailAddress,
@@ -34,14 +30,12 @@ class GoogleUser {
     photoUrl,
     gender,
     phoneNumber,
-  ) =>
+  }) =>
       GoogleUser(
         firstName: firstName,
         lastName: lastName,
         emailAddress: emailAddress,
         photoUrl: photoUrl,
         uuid: uuid,
-        gender: gender,
-        phoneNumber: phoneNumber,
       );
 }

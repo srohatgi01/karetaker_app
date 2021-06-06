@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
+
 import 'dart:convert';
 
 class User {
@@ -8,6 +12,7 @@ class User {
     this.uuid,
     this.phoneNumber,
     this.gender,
+    this.photoUrl,
   });
 
   final String? emailAddress;
@@ -16,6 +21,7 @@ class User {
   final String? uuid;
   final String? phoneNumber;
   final String? gender;
+  final String? photoUrl;
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
 
@@ -29,6 +35,7 @@ class User {
         uuid: json["uuid"] == null ? null : json["uuid"],
         phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
         gender: json["gender"] == null ? null : json["gender"],
+        photoUrl: json["photo_url"] == null ? null : json["photo_url"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,5 +45,24 @@ class User {
         "uuid": uuid == null ? null : uuid,
         "phone_number": phoneNumber == null ? null : phoneNumber,
         "gender": gender == null ? null : gender,
+        "photo_url": photoUrl == null ? null : photoUrl,
       };
+
+  factory User.fromLocal({
+    firstName,
+    lastName,
+    emailAddress,
+    uuid,
+    photoUrl,
+    gender,
+    phoneNumber,
+  }) =>
+      User(
+          firstName: firstName,
+          lastName: lastName,
+          emailAddress: emailAddress,
+          photoUrl: photoUrl,
+          uuid: uuid,
+          gender: gender,
+          phoneNumber: phoneNumber);
 }

@@ -35,33 +35,35 @@ class Auth {
 
       final User fuser = firebaseAuth.currentUser!;
 
-      final user = GoogleUser.fromGoogle(fuser);
+      final googleUser = GoogleUser.fromGoogle(fuser);
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isSignedIn', true);
-      prefs.setString('emailAddress', user.emailAddress!);
-      prefs.setString('first_name', user.firstName!);
-      prefs.setString('last_name', user.lastName!);
-      prefs.setString('uuid', user.uuid!);
-      prefs.setString('photoUrl', user.photoUrl!);
+      prefs.setString('emailAddress', googleUser.emailAddress!);
+      prefs.setString('first_name', googleUser.firstName!);
+      prefs.setString('last_name', googleUser.lastName!);
+      prefs.setString('uuid', googleUser.uuid!);
+      prefs.setString('photoUrl', googleUser.photoUrl!);
 
-      var emailAddress = prefs.getString('emailAddress') ?? null;
-      var firstName = prefs.getString('first_name') ?? null;
-      var lastName = prefs.getString('last_name') ?? null;
-      var uuid = prefs.getString('uuid') ?? null;
-      var photoUrl = prefs.getString('photoUrl') ?? null;
-      var gender = prefs.getString('gender') ?? null;
-      var phoneNumber = prefs.getString('phoneNumber') ?? null;
+      // var emailAddress = prefs.getString('emailAddress') ?? null;
+      // var firstName = prefs.getString('first_name') ?? null;
+      // var lastName = prefs.getString('last_name') ?? null;
+      // var uuid = prefs.getString('uuid') ?? null;
+      // var photoUrl = prefs.getString('photoUrl') ?? null;
 
-      GoogleUser googleUser = GoogleUser.fromLocal(firstName, lastName,
-          emailAddress, uuid, photoUrl, gender, phoneNumber);
+      // GoogleUser googleUser = GoogleUser.fromLocal(
+      //   emailAddress: emailAddress,
+      //   firstName: firstName,
+      //   lastName: lastName,
+      //   uuid: uuid,
+      //   photoUrl: photoUrl,
+      // );
 
       print(googleUser.firstName);
       print(googleUser.lastName);
       print(googleUser.emailAddress);
       print(googleUser.uuid);
       print(googleUser.photoUrl);
-      print(googleUser.gender);
-      print(googleUser.phoneNumber);
 
       return googleUser;
     } else {
@@ -80,23 +82,21 @@ class Auth {
       prefs.setString('gender', user.gender!);
       prefs.setString('phoneNumber', user.phoneNumber!);
 
-      return false;
+      return user;
     }
   }
 
-  createUserInDatabase(GoogleUser googleUser) async {
-    CustomUser.User user = CustomUser.User(
-      emailAddress: googleUser.emailAddress,
-      firstName: googleUser.firstName,
-      lastName: googleUser.lastName,
-      uuid: googleUser.uuid,
-    );
-    var json = user.toRawJson();
+  createUserInDatabase(String json) async {
     var createdUser = await UserApi().createUser(json: json);
 
     print("User created");
 
-    return CustomUser.User.fromRawJson(createdUser.body);
+    CustomUser.User user = CustomUser.User.fromRawJson(createdUser.body);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('gender', user.gender!);
+    prefs.setString('phoneNumber', user.phoneNumber!);
+
+    return user;
   }
 
   signOut() async {
@@ -108,6 +108,9 @@ class Auth {
     prefs.remove('last_name');
     prefs.remove('uuid');
     prefs.remove('photoUrl');
+    prefs.remove('gender');
+    prefs.remove('phoneNumber');
+
     print("Sign Out Successfully");
   }
 

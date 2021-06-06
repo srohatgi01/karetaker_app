@@ -27,16 +27,18 @@ class _GoogleAuthState extends State<GoogleAuth> {
             InkWell(
               onTap: () async {
                 GoogleUser googleUser = await _auth.signIn();
-                bool isNewUser =
-                    await _auth.isNewUser(googleUser.emailAddress!);
+                var isNewUser = await _auth.isNewUser(googleUser.emailAddress!);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Provider<GoogleUser>(
-                      create: (context) => googleUser,
-                      child:
-                          isNewUser == true ? GetContactDetails() : MainPage(),
-                    ),
+                    builder: (context) => isNewUser == true
+                        ? Provider<GoogleUser>(
+                            create: (context) => googleUser,
+                            child: GetContactDetails())
+                        : Provider<User>(
+                            create: (context) => isNewUser,
+                            child: MainPage(),
+                          ),
                   ),
                 );
               },

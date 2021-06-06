@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:karetaker/Presentation/main_page.dart';
-import 'package:karetaker/data/models/googleuser.dart';
 import 'package:provider/provider.dart';
 import 'Presentation/google_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/colors.dart';
+import 'data/models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +27,15 @@ void main() async {
   String? phoneNumber =
       prefs.getString('phoneNumber') ?? 'Didn\'t get Photo Url';
 
-  GoogleUser googleUser = GoogleUser.fromLocal(
-      firstName, lastName, emailAddress, uuid, photoUrl, gender, phoneNumber);
+  User user = User.fromLocal(
+    emailAddress: emailAddress,
+    firstName: firstName,
+    lastName: lastName,
+    uuid: uuid,
+    photoUrl: photoUrl,
+    gender: gender,
+    phoneNumber: phoneNumber,
+  );
 
   runApp(
     MaterialApp(
@@ -37,8 +44,8 @@ void main() async {
       theme: ThemeData(primarySwatch: primaryCustomColor),
       home: isSignedIn == false
           ? GoogleAuth()
-          : Provider<GoogleUser>(
-              create: (context) => googleUser,
+          : Provider<User>(
+              create: (context) => user,
               child: MainPage(),
             ),
     ),
