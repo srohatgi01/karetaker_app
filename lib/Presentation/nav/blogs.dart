@@ -7,7 +7,21 @@ class BlogPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Blogs Page'),
       ),
-      body: Center(child: Text("Blogs")),
+      body: ListView.builder(
+        itemBuilder: (context, position) =>
+            Card(child: Text(something[position])),
+        itemCount: something.length,
+      ),
     );
   }
+
+  final List<String> something = [
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven'
+  ];
 }

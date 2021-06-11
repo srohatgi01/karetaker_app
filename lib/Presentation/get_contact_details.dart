@@ -121,6 +121,8 @@ class _GetContactDetailsState extends State<GetContactDetails> {
                         phoneNumber: number,
                         photoUrl: googleUser.photoUrl)
                     .toRawJson();
+
+                // we are giving raw json to the UserApi().createNewUser
                 var returnedUser = await Auth().createUserInDatabase(newUser);
                 Navigator.pushReplacement(
                   context,
@@ -132,8 +134,6 @@ class _GetContactDetailsState extends State<GetContactDetails> {
                   ),
                 );
               },
-              // onPressed: () =>
-              //     {print('values are '), print(gender), print(number)},
             ),
           ),
         ],

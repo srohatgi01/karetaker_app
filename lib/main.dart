@@ -1,14 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:karetaker/Presentation/main_page.dart';
+import 'package:karetaker/data/repositories/notifications.dart';
 import 'package:provider/provider.dart';
-import 'Presentation/google_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
+
+import 'Presentation/google_auth.dart';
 import 'constants/colors.dart';
 import 'data/models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
 
   await Firebase.initializeApp();
 
@@ -39,15 +44,18 @@ void main() async {
 
   runApp(
     MaterialApp(
-      title: 'Karetaker',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: primaryCustomColor),
-      home: isSignedIn == false
-          ? GoogleAuth()
-          : Provider<User>(
-              create: (context) => user,
-              child: MainPage(),
-            ),
-    ),
+        title: 'Karetaker',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: primaryCustomColor),
+        home: isSignedIn == false
+            ? GoogleAuth()
+            : MultiProvider(
+                providers: [
+                  Provider<User>(create: (context) => user),
+                  ChangeNotifierProvider(
+                      create: (context) => NotificationServices())
+                ],
+                child: MainPage(),
+              )),
   );
 }

@@ -1,6 +1,6 @@
-# karetaker_app
+# Karetaker - Your personal healthcare companion
 
-A new Flutter project.
+Welcome to Karetaker, an all in one app to take care of your health for you. 
 
 ## Getting Started
 

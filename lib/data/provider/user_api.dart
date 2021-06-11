@@ -5,7 +5,8 @@ class UserApi {
   fetchUser({required String emailAddress}) async {
     try {
       var response =
-          await http.get(Uri.parse('$BASE_URL/users/getUser/$emailAddress'));
+          // await http.get(Uri.parse('$BASE_URL/users/getUser/$emailAddress'));
+          await http.get(Uri.parse(FETCH_USER_URL + emailAddress));
       if (response.statusCode == 200) {
         print('response - User Found in Database');
       } else if (response.statusCode == 404) {
@@ -19,7 +20,7 @@ class UserApi {
 
   createUser({required json}) async {
     try {
-      var response = await http.post(Uri.parse('$BASE_URL/users'),
+      var response = await http.post(Uri.parse(CREATE_USER_URL),
           body: json,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',

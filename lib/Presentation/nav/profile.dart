@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/authentication.dart';
+import 'package:karetaker/data/repositories/notifications.dart';
 import 'package:provider/provider.dart';
 import '../google_auth.dart';
 
@@ -138,6 +139,26 @@ class ProfilePage extends StatelessWidget {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => GoogleAuth()));
                 },
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Consumer<NotificationServices>(
+                builder: (context, model, _) => ElevatedButton(
+                  child: Text(
+                    'Cancel Notifications',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  onPressed: () async {
+                    model.cancelNotifications();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text('Unsuscribed from the reminder notifications'),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(height: 100)
