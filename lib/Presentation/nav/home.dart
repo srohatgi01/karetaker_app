@@ -8,6 +8,7 @@ import 'package:karetaker/presentation/nav/reports.dart';
 import 'package:provider/provider.dart';
 
 import 'features/add_pill.dart';
+import 'features/pills_details.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,41 +22,8 @@ class _HomePageState extends State<HomePage> {
     var pills = PillsRepository().fetchPills(
         emailAddress: Provider.of<User>(context).emailAddress.toString());
 
-    print(pills);
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-            tooltip: 'Show Reports',
-            icon: Icon(
-              Icons.padding_outlined,
-              size: 32,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReportsPage()));
-            },
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              tooltip: 'Show graphs',
-              icon: Icon(
-                Icons.bar_chart_rounded,
-                size: 36,
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GraphPage()));
-              },
-            ),
-          )
-        ],
-        title: Center(child: Text(APP_NAME)),
-      ),
+      appBar: _appBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,81 +32,79 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 40,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Text(
-                'Welcome back ' + user.firstName.toString() + ',',
-                style: TextStyle(fontSize: 26),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text('How are you feeling today?',
-                  style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30, left: 16, bottom: 8),
-              child: Text('Pills',
-                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700)),
-            ),
-            SizedBox(
-              height: 160.0,
-              child: FutureBuilder(
-                  future: PillsRepository().fetchPills(
-                      emailAddress:
-                          Provider.of<User>(context).emailAddress.toString()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      var pills = snapshot.data as List<Pills>;
-                      return ListView(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: pills.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Card(
-                                child: pillsCard(
-                                  medName: pills[index].pillName,
-                                  time: pills[index].pillTime,
-                                ),
-                              ),
-                            ),
-                          ),
-                          addPillCard(user)
-                        ],
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    } else {
-                      return Text('Nothing Returned');
-                    }
-                  }),
-            ),
-            Text(
-              'Demo Headline 2',
-              style: TextStyle(fontSize: 18),
-            ),
-            Card(
-              child: ListTile(
-                  title: Text('Motivation $int'),
-                  subtitle: Text('this is a description of the motivation')),
-            ),
-            Card(
-              child: ListTile(
-                  title: Text('Motivation $int'),
-                  subtitle: Text('this is a description of the motivation')),
-            ),
+            _greetingHead(firstName: user.firstName.toString()),
+            _greetingSubHead(),
+            _subHeading(title: 'Pills'),
+            _pillsCarousel(future: pills, userDetails: user),
+            _subHeading(title: 'Latest Health Stats'),
+            _healthStatCard(reading: '160/232', unit: 'mg/L'),
+            _healthStatCard(reading: '233/534', unit: 'cm/A'),
+            _healthStatCard(reading: '300', unit: 'BPM'),
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _appBar() {
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: IconButton(
+          tooltip: 'Show Reports',
+          icon: Icon(
+            Icons.padding_outlined,
+            size: 32,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ReportsPage()));
+          },
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            tooltip: 'Show graphs',
+            icon: Icon(
+              Icons.bar_chart_rounded,
+              size: 36,
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GraphPage()));
+            },
+          ),
+        )
+      ],
+      title: Center(child: Text(APP_NAME)),
+    );
+  }
+
+  Widget _greetingHead({required firstName}) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Text(
+        'Welcome back ' + firstName + ',',
+        style: TextStyle(fontSize: 26),
+      ),
+    );
+  }
+
+  Widget _greetingSubHead() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: Text('How are you feeling today?',
+          style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
+    );
+  }
+
+  Widget _subHeading({required String title}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 16, bottom: 8),
+      child: Text('$title',
+          style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700)),
     );
   }
 
@@ -206,7 +172,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget addPillCard(user) {
+  Widget addPillCard({required userDetails}) {
     return Hero(
       tag: 'addPill',
       child: Container(
@@ -233,25 +199,109 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(
                 builder: (context) => Provider<User>(
-                  create: (context) => user,
+                  create: (context) => userDetails,
                   child: AddPill(),
                 ),
               ),
             );
           },
-          //INFO: This is in-case to work again on the notifications.
-          // onPressed: () {
-          //   // model.instantNotification(
-          //   //     title: 'Morning pill Reminder',
-          //   //     subtitle: 'It\'s time for Morning pill');
-          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //     content: Text('Suscribed to the notifications'),
-          //   ));
-          //   // model.scheduleNotification(
-          //   //     title: 'Morning Pill Reminder', body: "Take the goddam pill");
-          //   model.schedulePillsNotification();
-          // },
         ),
+      ),
+    );
+  }
+
+  Widget _pillsCarousel({required future, required userDetails}) {
+    return SizedBox(
+      height: 160.0,
+      child: FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              var pills = snapshot.data as List<Pills>;
+              return ListView(
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: pills.length,
+                    itemBuilder: (BuildContext context, int index) => Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Card(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PillDetails(
+                                          pill: pills[index],
+                                        )));
+                          },
+                          child: pillsCard(
+                            medName: pills[index].pillName,
+                            time: pills[index].pillTime,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  addPillCard(userDetails: userDetails),
+                ],
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else {
+              return Text('Nothing Returned');
+            }
+          }),
+    );
+  }
+
+  Widget _healthStatCard({required reading, required unit}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 8,
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 8,
+                ),
+              ],
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.local_gas_station_outlined,
+              size: 40,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 30),
+            child: Text(
+              '$reading $unit',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
   }
