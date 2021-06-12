@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:karetaker/constants/strings.dart';
 import 'package:karetaker/data/models/pills.dart';
 import 'package:karetaker/data/models/user.dart';
-import 'package:karetaker/data/repositories/notifications.dart';
 import 'package:karetaker/data/repositories/pills_repo.dart';
 import 'package:karetaker/presentation/nav/graphs.dart';
 import 'package:karetaker/presentation/nav/reports.dart';
@@ -16,12 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    Provider.of<NotificationServices>(context, listen: false).initalize();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
@@ -97,34 +90,27 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       var pills = snapshot.data as List<Pills>;
-                      return MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider(
-                            create: (context) => NotificationServices(),
-                          )
-                        ],
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          physics: BouncingScrollPhysics(),
-                          children: [
-                            ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: pills.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Card(
-                                  child: pillsCard(
-                                    medName: pills[index].pillName,
-                                    time: pills[index].pillTime,
-                                  ),
+                      return ListView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: pills.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Card(
+                                child: pillsCard(
+                                  medName: pills[index].pillName,
+                                  time: pills[index].pillTime,
                                 ),
                               ),
                             ),
-                            addPillCard(user)
-                          ],
-                        ),
+                          ),
+                          addPillCard(user)
+                        ],
                       );
                     } else {
                       return Text('Nothing Returned');
