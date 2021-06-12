@@ -112,6 +112,11 @@ class _HomePageState extends State<HomePage> {
                           addPillCard(user)
                         ],
                       );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
                     } else {
                       return Text('Nothing Returned');
                     }
