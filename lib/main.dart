@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:karetaker/Presentation/main_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 import 'Presentation/google_auth.dart';
 import 'constants/colors.dart';
@@ -11,8 +10,6 @@ import 'data/models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  tz.initializeTimeZones();
 
   await Firebase.initializeApp();
 
