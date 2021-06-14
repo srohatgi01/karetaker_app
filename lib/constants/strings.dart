@@ -9,6 +9,10 @@ const FETCH_USER_URL = BASE_URL + '/users/getuser/';
 const CREATE_USER_URL = BASE_URL + '/users';
 const FETCH_USER_PILLS = BASE_URL + '/users/pills/getpills';
 const CREATE_USER_PILL = BASE_URL + '/users/pills/';
+const GET_LATEST_SUGAR_READING = BASE_URL + '/users/sugar/latest/';
+const GET_LATEST_HEART_READING = BASE_URL + '/users/heart/latest/';
+const GET_LATEST_BLOODPRESSURE_READING =
+    BASE_URL + '/users/bloodpressure/latest/';
 
 // Gender
 const List<String> GENDER_SELECT = ['Male', 'Female', 'Others'];

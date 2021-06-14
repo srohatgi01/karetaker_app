@@ -5,23 +5,15 @@ class BlogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Blogs Page'),
+        leading: Icon(Icons.search),
+        title: TextField(
+          decoration: InputDecoration(
+            hintText: 'Search here',
+          ),
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, position) =>
-            Card(child: Text(something[position])),
-        itemCount: something.length,
-      ),
+      body: Center(child: Text('Blogs Page')),
     );
   }
-
-  final List<String> something = [
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven'
-  ];
 }
