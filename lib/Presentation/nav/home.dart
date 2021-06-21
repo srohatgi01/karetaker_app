@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/constants/strings.dart';
+import 'package:karetaker/data/models/bloodpressure.dart';
+import 'package:karetaker/data/models/heartrate.dart';
 import 'package:karetaker/data/models/pills.dart';
+import 'package:karetaker/data/models/sugar.dart';
 import 'package:karetaker/data/models/user.dart';
+import 'package:karetaker/data/repositories/health_stats_repo.dart';
 import 'package:karetaker/data/repositories/pills_repo.dart';
 import 'package:karetaker/presentation/nav/graphs.dart';
 import 'package:karetaker/presentation/nav/reports.dart';
 import 'package:provider/provider.dart';
-
 import 'features/add_pill.dart';
 import 'features/pills_details.dart';
 
@@ -21,6 +24,12 @@ class _HomePageState extends State<HomePage> {
     User user = Provider.of<User>(context);
     var pills = PillsRepository().fetchPills(
         emailAddress: Provider.of<User>(context).emailAddress.toString());
+    var sugarReading = HealthStatsRepo()
+        .fetchLatestSugarStats(emailAddress: user.emailAddress);
+    var heartReading = HealthStatsRepo()
+        .fetchLatestHeartStats(emailAddress: user.emailAddress);
+    var bloodReading = HealthStatsRepo()
+        .fetchLatestBloodPressureStats(emailAddress: user.emailAddress);
 
     return Scaffold(
       appBar: _appBar(),
@@ -37,13 +46,64 @@ class _HomePageState extends State<HomePage> {
             _subHeading(title: 'Pills'),
             _pillsCarousel(future: pills, userDetails: user),
             _subHeading(title: 'Latest Health Stats'),
-            _healthStatCard(reading: '160/232', unit: 'mg/L'),
-            _healthStatCard(reading: '233/534', unit: 'cm/A'),
-            _healthStatCard(reading: '300', unit: 'BPM'),
+            _sugarReading(future: sugarReading),
+            _heartReading(future: heartReading),
+            _bloodPressureReading(future: bloodReading)
           ],
         ),
       ),
     );
+  }
+
+  Widget _bloodPressureReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as BloodPressure;
+            return _healthStatCard(reading: reading.readingValue, unit: 'mmHg');
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
+  }
+
+  Widget _heartReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as HeartRate;
+            return _healthStatCard(reading: reading.readingValue, unit: 'bpm');
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
+  }
+
+  Widget _sugarReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as Sugar;
+            return _healthStatCard(reading: reading.value, unit: 'mg/dL');
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
   }
 
   AppBar _appBar() {

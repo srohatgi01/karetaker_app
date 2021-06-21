@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:karetaker/Presentation/nav/features/appointment/appointment-search.dart';
 import 'package:karetaker/presentation/nav/home.dart';
-
 import 'nav/appointments.dart';
 import 'nav/blogs.dart';
 import 'nav/profile.dart';
@@ -35,17 +36,17 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        focusElevation: 0,
-        highlightElevation: 0,
-        onPressed: () {
-          print('Services Button Clicked');
-        },
+        shape: CircleBorder(),
+        backgroundColor: Colors.red,
         child: Icon(
-          Icons.where_to_vote_rounded,
-          color: Colors.red,
-          size: 60,
+          FontAwesomeIcons.solidHeart,
+          color: Colors.white,
+        ),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AppointmentSearch(),
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -59,12 +60,12 @@ class _MainPageState extends State<MainPage> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_border),
+              icon: Icon(Icons.bookmark),
               label: 'Blogs',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_basket_outlined),
-              label: 'Home',
+              icon: Icon(FontAwesomeIcons.notesMedical),
+              label: 'Appointments',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
