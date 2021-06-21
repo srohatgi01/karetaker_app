@@ -1,5 +1,6 @@
 const String APP_NAME = 'Karetaker';
 const String TAGLINE = 'Your personal Healthcare Companion';
+const int PRIMARY_COLOR = 0xFF639FA5;
 
 // API
 const HEADER_DETAILS_KEY = 'Content-Type';
@@ -13,6 +14,7 @@ const GET_LATEST_SUGAR_READING = BASE_URL + '/users/sugar/latest/';
 const GET_LATEST_HEART_READING = BASE_URL + '/users/heart/latest/';
 const GET_LATEST_BLOODPRESSURE_READING =
     BASE_URL + '/users/bloodpressure/latest/';
+const SEARCH_DOCTORS = BASE_URL + '/doctors/search/';
 
 // Gender
 const List<String> GENDER_SELECT = ['Male', 'Female', 'Others'];

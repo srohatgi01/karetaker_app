@@ -25,11 +25,12 @@ dependencies:
     sdk: flutter
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
+  font_awesome_flutter: ^9.1.0
   google_sign_in: ^5.0.4
   http: ^0.13.3
   provider: ^5.0.0
   shared_preferences: ^2.0.6
-  font_awesome_flutter: ^9.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +48,13 @@ flutter:
   assets:
     - assets/icons/google.png
     - assets/icons/logo.png
+    - assets/symptoms/distress.png
+    - assets/symptoms/stomachache.png
+    - assets/symptoms/fatigue.png
+    - assets/symptoms/nausea.png
+    - assets/symptoms/weightloss.png
+    - assets/symptoms/headache.png
+    - assets/symptoms/stomachpain.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
