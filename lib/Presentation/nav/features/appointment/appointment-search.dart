@@ -58,15 +58,80 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
         shrinkWrap: true,
         itemCount: docs.length,
         itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(
-                docs[index].firstName.toString() +
-                    ' ' +
-                    docs[index].lastName.toString(),
+          return Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(color: Colors.grey, blurRadius: 2, spreadRadius: 1)
+                ],
               ),
-            ),
-          );
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    width: 5,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(PRIMARY_COLOR),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 16, top: 20, bottom: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Dr. ' +
+                                docs[index].firstName.toString() +
+                                ' ' +
+                                docs[index].lastName.toString(),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 3, bottom: 12),
+                            child: Text(
+                              'Dermatologist',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text('Practicing for '),
+                              Text(
+                                docs[index].practicingYears.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(' years')
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 8, right: 14),
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Book Appointment'),
+                    ),
+                  ),
+                ],
+              ));
         });
   }
 
