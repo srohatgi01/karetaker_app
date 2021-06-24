@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
           future: future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              var pills = snapshot.data as List<Pills>;
+              List<Pills> pills = snapshot.data as List<Pills>;
               return ListView(
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),

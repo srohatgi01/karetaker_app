@@ -30,7 +30,8 @@ dependencies:
   http: ^0.13.3
   provider: ^5.0.0
   shared_preferences: ^2.0.6
-
+  syncfusion_flutter_calendar: ^19.1.69
+  table_calendar: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,7 @@ flutter:
     - assets/symptoms/weightloss.png
     - assets/symptoms/headache.png
     - assets/symptoms/stomachpain.png
+    - packages/timezone/data/2020a.tzf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

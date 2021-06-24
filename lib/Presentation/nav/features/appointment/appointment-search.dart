@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:karetaker/Presentation/nav/features/appointment/doctors-page.dart';
 import 'package:karetaker/constants/strings.dart';
-import 'package:karetaker/data/models/doctor.dart';
-import 'package:karetaker/data/provider/search_api.dart';
+import 'package:karetaker/data/models/search_doctor.dart';
 import 'package:karetaker/data/repositories/search_repo.dart';
 
 class AppointmentSearch extends StatefulWidget {
@@ -12,7 +12,7 @@ class AppointmentSearch extends StatefulWidget {
 }
 
 class _AppointmentSearchState extends State<AppointmentSearch> {
-  TextEditingController textEditingController = TextEditingController();
+  SearchRepo _searchRepo = SearchRepo();
   var future;
 
   @override
@@ -24,13 +24,13 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            searchField(textEditingController),
+            searchField(),
             StreamBuilder(
-                stream: Stream.fromFuture(SearchRepo().search(keyword: future)),
+                stream: Stream.fromFuture(_searchRepo.search(keyword: future)),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData) {
-                    var doctors = snapshot.data as List<Doctor>;
+                    var doctors = snapshot.data as List<SearchDoctor>;
                     return buildDoctorCards(docs: doctors);
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -47,13 +47,7 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
     );
   }
 
-  @override
-  void dispose() {
-    textEditingController.dispose();
-    super.dispose();
-  }
-
-  buildDoctorCards({required List<Doctor> docs}) {
+  buildDoctorCards({required List<SearchDoctor> docs}) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: docs.length,
@@ -101,7 +95,10 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
                           Padding(
                             padding: const EdgeInsets.only(top: 3, bottom: 12),
                             child: Text(
-                              'Dermatologist',
+                              docs[index]
+                                  .specialities!
+                                  .specialityName
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 13,
                                   color: Colors.black.withOpacity(0.5),
@@ -126,7 +123,18 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
                     margin: EdgeInsets.only(bottom: 8, right: 14),
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => {
+                        // Uncomment it if you want to open the doctor's page and then when you hit back, come back to the
+                        // home screen instead of going to Appointment Search Page.
+                        // Navigator.pop(context),
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DoctorPage(doctor: docs[index])),
+                        ),
+                      },
                       child: Text('Book Appointment'),
                     ),
                   ),
@@ -240,7 +248,7 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
     );
   }
 
-  Padding searchField(TextEditingController textEditingController) {
+  Padding searchField() {
     return Padding(
       padding: EdgeInsets.all(16),
       child: TextField(
@@ -250,7 +258,6 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
           });
         },
         style: TextStyle(fontSize: 18),
-        controller: textEditingController,
         maxLines: 1,
         autofocus: false,
         decoration: InputDecoration(
