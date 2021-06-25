@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:karetaker/constants/strings.dart';
 import 'package:karetaker/data/models/doctor_profile.dart';
 import 'package:karetaker/data/models/hospitals.dart';
-import 'package:karetaker/data/models/appointment.dart' as App;
 import 'package:karetaker/data/models/slots.dart';
-import 'package:karetaker/data/models/user.dart';
-import 'package:karetaker/data/provider/search_api.dart';
 import 'package:karetaker/data/repositories/appointment_repo.dart';
 import 'package:karetaker/data/repositories/search_repo.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class DoctorPage extends StatefulWidget {
   final doctor;
@@ -233,6 +228,9 @@ class _DoctorPageState extends State<DoctorPage> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 ),
               ),
+              SizedBox(
+                height: 60,
+              ),
             ],
           ),
         ),
@@ -310,7 +308,15 @@ class _DoctorPageState extends State<DoctorPage> {
           var year = date.date!.year;
           this.setState(() {
             selectedSlot = null;
-            fulldate = month < 10 ? '$year-0$month-$day' : '$year-$month-$day';
+            if (month < 10 && day < 10) {
+              fulldate = '$year-0$month-0$day';
+            } else if (month >= 10 && day < 10) {
+              fulldate = '$year-$month-0$day';
+            } else if (month < 10 && day >= 10) {
+              fulldate = '$year-0$month-$day';
+            } else if (month >= 10 && day >= 10) {
+              fulldate = '$year-$month-$day';
+            }
           });
           print(fulldate);
           print(doctorId);
