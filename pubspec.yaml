@@ -31,7 +31,6 @@ dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.6
   syncfusion_flutter_calendar: ^19.1.69
-  table_calendar: ^3.0.0
 
 dev_dependencies:
   flutter_test:
