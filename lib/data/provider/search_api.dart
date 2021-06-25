@@ -30,11 +30,12 @@ class SearchApi {
 
   findAvailableSlots({required String date, required String doctorId}) async {
     try {
-      var response = await http
-          .get(Uri.parse(BASE_URL + GET_FREE_SLOTS + doctorId + '/' + date));
+      var parsed = Uri.parse(GET_FREE_SLOTS + doctorId + '/' + date);
+      print('parsed - ' + parsed.toString());
+      var response = await http.get(parsed);
 
       var decodedJson = json.decode(response.body);
-
+      print(decodedJson);
       return decodedJson;
     } on Exception catch (e) {
       print('Search Exception $e');
