@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:karetaker/constants/strings.dart';
 
@@ -15,6 +17,19 @@ class AppointmentApi {
           : print('Appointment didn\'t book');
     } on Exception catch (e) {
       print(e);
+    }
+  }
+
+  fetchAppointmentsByUserId({required emailAddress}) async {
+    try {
+      var response =
+          await http.get(Uri.parse(GET_APPOINTMENTS_OF_USER + emailAddress));
+
+      var decodedJson = json.decode(response.body);
+
+      return decodedJson;
+    } on Exception catch (e) {
+      print('Fetch Appointments from User Id Error - $e');
     }
   }
 }

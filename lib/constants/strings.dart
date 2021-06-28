@@ -18,7 +18,16 @@ const SEARCH_DOCTORS = BASE_URL + '/doctors/search/';
 const GET_DOCTOR_BY_ID = BASE_URL + '/doctors/doctorbyid/';
 const GET_FREE_SLOTS = BASE_URL + '/appointments/getfreeslots/';
 const CREATE_NEW_APPOINTMENT = BASE_URL + '/appointments/';
+const GET_SUGAR_READINGS_OF_USER = BASE_URL + '/users/sugar/sugarbyid/';
+const GET_BP_READINGS_OF_USER =
+    BASE_URL + '/users/bloodpressure/bloodpressurebyid/';
+const GET_HEART_READINGS_OF_USER = BASE_URL + '/users/heart/heartbyid/';
+const GET_APPOINTMENTS_OF_USER = BASE_URL + '/appointments/appointmentbyid/';
 
 // Gender
 const List<String> GENDER_SELECT = ['Male', 'Female', 'Others'];
 const GENDER_SELECT_VALUES = ['MALE', 'FEMALE', 'OTHERS'];
+
+//Colors
+const BOOKED_BUTTON_COLOR = 0xFFFF9900;
+const CANCELLED_BUTTON_COLOR = 0xFFCE1900;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:karetaker/Presentation/nav/features/appointment/appointment-search.dart';
+import 'package:karetaker/Presentation/nav/graphs.dart';
 import 'package:karetaker/presentation/nav/home.dart';
 import 'nav/appointments.dart';
 import 'nav/blogs.dart';
@@ -27,7 +28,7 @@ class _MainPageState extends State<MainPage> {
   static List<Widget> _widgetOptions = [
     HomePage(),
     BlogPage(),
-    AppointmentPage(),
+    GraphPage(),
     ProfilePage()
   ];
 
@@ -64,8 +65,8 @@ class _MainPageState extends State<MainPage> {
               label: 'Blogs',
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.notesMedical),
-              label: 'Appointments',
+              icon: Icon(FontAwesomeIcons.chartBar),
+              label: 'Stats',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

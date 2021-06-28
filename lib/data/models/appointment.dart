@@ -35,9 +35,8 @@ class Appointment {
   factory Appointment.fromJson(Map<String, dynamic> json) => Appointment(
         appointmentId:
             json["appointment_id"] == null ? null : json["appointment_id"],
-        // appointmentDate: json["appointment_date"] == null
-        //     ? null
-        //     : DateTime.parse(json["appointment_date"]),
+        appointmentDate:
+            json["appointment_date"] == null ? null : json["appointment_date"],
         userId: json["user_id"] == null ? null : json["user_id"],
         doctorId: json["doctor_id"] == null ? null : json["doctor_id"],
         hospitalId: json["hospital_id"] == null ? null : json["hospital_id"],

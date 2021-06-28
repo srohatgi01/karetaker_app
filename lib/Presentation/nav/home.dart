@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:karetaker/Presentation/nav/appointments.dart';
 import 'package:karetaker/constants/strings.dart';
 import 'package:karetaker/data/models/bloodpressure.dart';
 import 'package:karetaker/data/models/heartrate.dart';
@@ -7,7 +9,6 @@ import 'package:karetaker/data/models/sugar.dart';
 import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/health_stats_repo.dart';
 import 'package:karetaker/data/repositories/pills_repo.dart';
-import 'package:karetaker/presentation/nav/graphs.dart';
 import 'package:karetaker/presentation/nav/reports.dart';
 import 'package:provider/provider.dart';
 import 'features/add_pill.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         .fetchLatestBloodPressureStats(emailAddress: user.emailAddress);
 
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context, user: user),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,58 +56,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _bloodPressureReading({required future}) {
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var reading = snapshot.data as BloodPressure;
-            return _healthStatCard(reading: reading.readingValue, unit: 'mmHg');
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error getting data');
-          } else {
-            return Text('Nothing to show here');
-          }
-        });
-  }
-
-  Widget _heartReading({required future}) {
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var reading = snapshot.data as HeartRate;
-            return _healthStatCard(reading: reading.readingValue, unit: 'bpm');
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error getting data');
-          } else {
-            return Text('Nothing to show here');
-          }
-        });
-  }
-
-  Widget _sugarReading({required future}) {
-    return FutureBuilder(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var reading = snapshot.data as Sugar;
-            return _healthStatCard(reading: reading.value, unit: 'mg/dL');
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error getting data');
-          } else {
-            return Text('Nothing to show here');
-          }
-        });
-  }
-
-  AppBar _appBar() {
+  AppBar _appBar(BuildContext context, {required User user}) {
     return AppBar(
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -126,20 +76,89 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
-            tooltip: 'Show graphs',
+            tooltip: 'Show Booked Appointments',
             icon: Icon(
-              Icons.bar_chart_rounded,
-              size: 36,
+              FontAwesomeIcons.notesMedical,
             ),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GraphPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Provider<User>(
+                    create: (context) => user,
+                    child: AppointmentPage(),
+                  ),
+                ),
+              );
             },
           ),
         )
       ],
       title: Center(child: Text(APP_NAME)),
     );
+  }
+
+  Widget _bloodPressureReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as BloodPressure;
+            return _healthStatCard(
+              reading: reading.readingValue,
+              unit: 'mmHg',
+              icon: FontAwesomeIcons.prescription,
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
+  }
+
+  Widget _heartReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as HeartRate;
+            return _healthStatCard(
+              reading: reading.readingValue,
+              unit: 'bpm',
+              icon: FontAwesomeIcons.heartbeat,
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
+  }
+
+  Widget _sugarReading({required future}) {
+    return FutureBuilder(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var reading = snapshot.data as Sugar;
+            return _healthStatCard(
+              reading: reading.value,
+              unit: 'mg/dL',
+              icon: FontAwesomeIcons.solidWindowRestore,
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error getting data');
+          } else {
+            return Text('Nothing to show here');
+          }
+        });
   }
 
   Widget _greetingHead({required firstName}) {
@@ -320,7 +339,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _healthStatCard({required reading, required unit}) {
+  Widget _healthStatCard({required reading, required unit, required icon}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
@@ -350,8 +369,8 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             padding: EdgeInsets.all(8),
             child: Icon(
-              Icons.local_gas_station_outlined,
-              size: 40,
+              icon,
+              size: 35,
             ),
           ),
           Container(
