@@ -32,4 +32,17 @@ class AppointmentApi {
       print('Fetch Appointments from User Id Error - $e');
     }
   }
+
+  cancelStatus({appointmentId}) async {
+    try {
+      var message = json.encode({"status": "CANCELED_BY_USER"});
+      await http.patch(
+        Uri.parse('$UPDATE_USER_STATUS$appointmentId'),
+        body: message,
+        headers: <String, String>{HEADER_DETAILS_KEY: HEADER_DETAILS_VALUE},
+      );
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
 }
