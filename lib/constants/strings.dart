@@ -22,7 +22,12 @@ const GET_SUGAR_READINGS_OF_USER = BASE_URL + '/users/sugar/sugarbyid/';
 const GET_BP_READINGS_OF_USER =
     BASE_URL + '/users/bloodpressure/bloodpressurebyid/';
 const GET_HEART_READINGS_OF_USER = BASE_URL + '/users/heart/heartbyid/';
+
+// Route used to get all the appointments of the user.
 const GET_APPOINTMENTS_OF_USER = BASE_URL + '/appointments/appointmentbyid/';
+
+// Route used to update the user booked status to cancelled by user.
+const UPDATE_USER_STATUS = BASE_URL + '/appointments/appointmentbyid/';
 
 // Gender
 const List<String> GENDER_SELECT = ['Male', 'Female', 'Others'];
