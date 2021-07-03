@@ -35,4 +35,9 @@ class AppointmentRepo {
 
     return appointmentList;
   }
+
+  cancelAppointment({required appointmentId}) async {
+    await AppointmentApi().cancelStatus(appointmentId: appointmentId);
+    print('Appointment Cancelled');
+  }
 }
