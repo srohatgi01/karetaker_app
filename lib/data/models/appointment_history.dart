@@ -6,6 +6,7 @@ import 'dart:convert';
 
 class AppointmentHistory {
   AppointmentHistory({
+    this.appointmentId,
     this.appointmentDate,
     this.status,
     this.slots,
@@ -13,6 +14,7 @@ class AppointmentHistory {
     this.doctors,
   });
 
+  final int? appointmentId;
   final DateTime? appointmentDate;
   final String? status;
   final SlotsHistory? slots;
@@ -26,6 +28,8 @@ class AppointmentHistory {
 
   factory AppointmentHistory.fromJson(Map<String, dynamic> json) =>
       AppointmentHistory(
+        appointmentId:
+            json["appointment_id"] == null ? null : json["appointment_id"],
         appointmentDate: json["appointment_date"] == null
             ? null
             : DateTime.parse(json["appointment_date"]),
@@ -41,6 +45,7 @@ class AppointmentHistory {
       );
 
   Map<String, dynamic> toJson() => {
+        "appointment_id": appointmentId == null ? null : appointmentId,
         "appointment_date":
             appointmentDate == null ? null : appointmentDate!.toIso8601String(),
         "status": status == null ? null : status,
