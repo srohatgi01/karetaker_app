@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:karetaker/constants/strings.dart';
+import 'package:karetaker/data/repositories/appointment_repo.dart';
 
 class AppointmentHistoryCard extends StatelessWidget {
-  const AppointmentHistoryCard({
-    Key? key,
-    this.doctorName,
-    this.appointmentDate,
-    this.appointmentTime,
-    this.appointmentStatus,
-    this.hospitalName,
-    this.hospitalAddress,
-  }) : super(key: key);
+  const AppointmentHistoryCard(
+      {Key? key,
+      this.doctorName,
+      this.appointmentDate,
+      this.appointmentTime,
+      this.appointmentStatus,
+      this.hospitalName,
+      this.hospitalAddress,
+      this.appointmentId})
+      : super(key: key);
 
   final doctorName;
   final appointmentDate;
@@ -18,6 +20,7 @@ class AppointmentHistoryCard extends StatelessWidget {
   final appointmentStatus;
   final hospitalName;
   final hospitalAddress;
+  final appointmentId;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +99,7 @@ class AppointmentHistoryCard extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  returnUpdateButton(appointmentStatus, context),
+                  returnUpdateButton(appointmentStatus, context, appointmentId),
                 ],
               ),
             ),
@@ -106,15 +109,15 @@ class AppointmentHistoryCard extends StatelessWidget {
     );
   }
 
-  returnUpdateButton(appointmentStatus, context) {
+  returnUpdateButton(appointmentStatus, context, appointmentId) {
     if (appointmentStatus == 'BOOKED') {
-      return updateStatusButton(context);
+      return cancelStatusButton(context, appointmentId);
     } else {
       return SizedBox();
     }
   }
 
-  Widget updateStatusButton(BuildContext context) {
+  Widget cancelStatusButton(BuildContext context, appointmentId) {
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       width: MediaQuery.of(context).size.width,
@@ -124,14 +127,44 @@ class AppointmentHistoryCard extends StatelessWidget {
       ),
       child: TextButton(
         child: Text(
-          'Update Booking Status',
+          'Cancel Appointment',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),
         ),
-        onPressed: () => {},
+        onPressed: () => {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Are you sure?'),
+              content: Text('Do you want to cancel the appointment?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    AppointmentRepo()
+                        .cancelAppointment(appointmentId: appointmentId);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Appointment Cancelled Successfully.'),
+                      ),
+                    );
+                  },
+                  child: Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('No'),
+                ),
+              ],
+            ),
+          )
+        },
       ),
     );
   }

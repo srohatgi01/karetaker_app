@@ -209,10 +209,9 @@ class _DoctorPageState extends State<DoctorPage> {
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
                                   int count = 0;
                                   Navigator.of(context)
-                                      .popUntil((_) => count++ >= 2);
+                                      .popUntil((_) => count++ > 2);
                                 },
                                 child: Text('Okay'),
                               ),
