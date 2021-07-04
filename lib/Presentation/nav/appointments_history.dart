@@ -5,14 +5,14 @@ import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/appointment_repo.dart';
 import 'package:provider/provider.dart';
 
-class AppointmentPage extends StatelessWidget {
+class AppointmentHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Appointment Page'),
+        title: Text('Appointments History'),
       ),
       body: StreamBuilder(
         stream: Stream.fromFuture(

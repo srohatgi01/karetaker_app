@@ -34,10 +34,7 @@ class Sugar {
       );
 
   Map<String, dynamic> toJson() => {
-        "reading_id": readingId == null ? null : readingId,
         "user_id": userId == null ? null : userId,
         "value": value == null ? null : value,
-        "type": type == null ? null : type,
-        "timestamp": timestamp == null ? null : timestamp!.toIso8601String(),
       };
 }

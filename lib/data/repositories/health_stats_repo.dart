@@ -69,4 +69,26 @@ class HealthStatsRepo {
     print('bp - ${healthStats.bloodPressureReadings.length}');
     return healthStats;
   }
+
+  createSugarReading({required userId, required readingValue}) async {
+    print('userId - $userId');
+    print('reading Value - $readingValue');
+    var sugarRawJson = Sugar(userId: userId, value: readingValue).toRawJson();
+    print('Decoded Json = $sugarRawJson');
+    await _healthStatsApi.postSugarRate(json: sugarRawJson);
+  }
+
+  createBloodPressureReading({required userId, required readingValue}) async {
+    var bloodPressureRawJson =
+        BloodPressure(userId: userId, readingValue: readingValue).toRawJson();
+
+    await _healthStatsApi.postBloodRate(json: bloodPressureRawJson);
+  }
+
+  createHeartRateReading({required userId, required readingValue}) async {
+    var heartRateRawJson =
+        HeartRate(readingValue: readingValue, userId: userId).toRawJson();
+
+    await _healthStatsApi.postHeartRate(json: heartRateRawJson);
+  }
 }
