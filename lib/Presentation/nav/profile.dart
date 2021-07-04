@@ -18,21 +18,18 @@ class ProfilePage extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Padding(padding: EdgeInsets.only(top: 100)),
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(180),
-                child: Image.network(
-                  user.photoUrl!,
-                  height: 150,
-                  fit: BoxFit.fill,
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(180),
+              child: Image.network(
+                user.photoUrl!,
+                height: 150,
+                fit: BoxFit.fill,
               ),
             ),
-            Expanded(
-                child: Column(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
@@ -78,24 +75,6 @@ class ProfilePage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "UUID - ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        user.uuid!,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
                         "Number - ",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
@@ -126,7 +105,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 )
               ],
-            )),
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(

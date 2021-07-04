@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:karetaker/Presentation/nav/appointments_history.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:karetaker/Presentation/nav/features/add_readings.dart';
 import 'package:karetaker/constants/strings.dart';
 import 'package:karetaker/data/models/bloodpressure.dart';
 import 'package:karetaker/data/models/heartrate.dart';
@@ -7,7 +11,6 @@ import 'package:karetaker/data/models/sugar.dart';
 import 'package:karetaker/data/models/user.dart';
 import 'package:karetaker/data/repositories/health_stats_repo.dart';
 import 'package:karetaker/data/repositories/pills_repo.dart';
-import 'package:karetaker/presentation/nav/graphs.dart';
 import 'package:karetaker/presentation/nav/reports.dart';
 import 'package:provider/provider.dart';
 import 'features/add_pill.dart';
@@ -32,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         .fetchLatestBloodPressureStats(emailAddress: user.emailAddress);
 
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context, user: user),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +48,7 @@ class _HomePageState extends State<HomePage> {
             _greetingSubHead(),
             _subHeading(title: 'Pills'),
             _pillsCarousel(future: pills, userDetails: user),
-            _subHeading(title: 'Latest Health Stats'),
+            healthStatsHeadingRow(user: user),
             _sugarReading(future: sugarReading),
             _heartReading(future: heartReading),
             _bloodPressureReading(future: bloodReading)
@@ -55,13 +58,179 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Row healthStatsHeadingRow({required user}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _subHeading(title: 'Latest Health Stats'),
+        IconButton(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.only(right: 40),
+            icon: Icon(
+              Icons.add,
+              size: 40,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text('Which reading would you like to add?'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 250,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 8,
+                                  )
+                                ],
+                              ),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Provider<User>(
+                                          create: (context) => user,
+                                          child:
+                                              AddReading(readingType: 'sugar'),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text('Sugar Reading')),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 250,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 8,
+                                  )
+                                ],
+                              ),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Provider<User>(
+                                          create: (context) => user,
+                                          child: AddReading(readingType: 'bp'),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text('Blood Pressure Reading')),
+                            ),
+                            Container(
+                              width: 250,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 8,
+                                  )
+                                ],
+                              ),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Provider<User>(
+                                          create: (context) => user,
+                                          child: AddReading(
+                                              readingType: 'heartrate'),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text('Heart Rate Reading')),
+                            ),
+                          ],
+                        ),
+                      ));
+            })
+      ],
+    );
+  }
+
+  AppBar _appBar(BuildContext context, {required User user}) {
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: IconButton(
+          tooltip: 'Show Reports',
+          icon: Icon(
+            Icons.padding_outlined,
+            size: 32,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Provider<User>(
+                    create: (context) => user,
+                    child: ReportsPage(),
+                  ),
+                ));
+          },
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            tooltip: 'Show Booked Appointments',
+            icon: Icon(
+              FontAwesomeIcons.notesMedical,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Provider<User>(
+                    create: (context) => user,
+                    child: AppointmentHistoryPage(),
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+      ],
+      title: Center(child: Text(APP_NAME)),
+    );
+  }
+
   Widget _bloodPressureReading({required future}) {
     return FutureBuilder(
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var reading = snapshot.data as BloodPressure;
-            return _healthStatCard(reading: reading.readingValue, unit: 'mmHg');
+            return _healthStatCard(
+              reading: reading.readingValue,
+              unit: 'mmHg',
+              icon: FontAwesomeIcons.prescription,
+            );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -78,7 +247,11 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var reading = snapshot.data as HeartRate;
-            return _healthStatCard(reading: reading.readingValue, unit: 'bpm');
+            return _healthStatCard(
+              reading: reading.readingValue,
+              unit: 'bpm',
+              icon: FontAwesomeIcons.heartbeat,
+            );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -95,7 +268,11 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var reading = snapshot.data as Sugar;
-            return _healthStatCard(reading: reading.value, unit: 'mg/dL');
+            return _healthStatCard(
+              reading: reading.value,
+              unit: 'mg/dL',
+              icon: FontAwesomeIcons.solidWindowRestore,
+            );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -104,42 +281,6 @@ class _HomePageState extends State<HomePage> {
             return Text('Nothing to show here');
           }
         });
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: IconButton(
-          tooltip: 'Show Reports',
-          icon: Icon(
-            Icons.padding_outlined,
-            size: 32,
-          ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ReportsPage()));
-          },
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-            tooltip: 'Show graphs',
-            icon: Icon(
-              Icons.bar_chart_rounded,
-              size: 36,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GraphPage()));
-            },
-          ),
-        )
-      ],
-      title: Center(child: Text(APP_NAME)),
-    );
   }
 
   Widget _greetingHead({required firstName}) {
@@ -277,7 +418,7 @@ class _HomePageState extends State<HomePage> {
           future: future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              var pills = snapshot.data as List<Pills>;
+              List<Pills> pills = snapshot.data as List<Pills>;
               return ListView(
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
@@ -320,7 +461,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _healthStatCard({required reading, required unit}) {
+  Widget _healthStatCard({required reading, required unit, required icon}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
@@ -350,8 +491,8 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             padding: EdgeInsets.all(8),
             child: Icon(
-              Icons.local_gas_station_outlined,
-              size: 40,
+              icon,
+              size: 35,
             ),
           ),
           Container(

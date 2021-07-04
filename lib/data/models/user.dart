@@ -13,6 +13,10 @@ class User {
     this.phoneNumber,
     this.gender,
     this.photoUrl,
+    this.age,
+    this.bodyHeight,
+    this.bodyWeight,
+    this.bloodGroup,
   });
 
   final String? emailAddress;
@@ -22,6 +26,10 @@ class User {
   final String? phoneNumber;
   final String? gender;
   final String? photoUrl;
+  final int? age;
+  final double? bodyHeight;
+  final double? bodyWeight;
+  final String? bloodGroup;
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
 
@@ -36,6 +44,12 @@ class User {
         phoneNumber: json["phone_number"] == null ? null : json["phone_number"],
         gender: json["gender"] == null ? null : json["gender"],
         photoUrl: json["photo_url"] == null ? null : json["photo_url"],
+        age: json["age"] == null ? null : json["age"],
+        bodyHeight:
+            json["body_height"] == null ? null : json["body_height"].toDouble(),
+        bodyWeight:
+            json["body_weight"] == null ? null : json["body_weight"].toDouble(),
+        bloodGroup: json["blood_group"] == null ? null : json["blood_group"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,6 +60,10 @@ class User {
         "phone_number": phoneNumber == null ? null : phoneNumber,
         "gender": gender == null ? null : gender,
         "photo_url": photoUrl == null ? null : photoUrl,
+        "age": age == null ? null : age,
+        "body_height": bodyHeight == null ? null : bodyHeight,
+        "body_weight": bodyWeight == null ? null : bodyWeight,
+        "blood_group": bloodGroup == null ? null : bloodGroup,
       };
 
   factory User.fromLocal({

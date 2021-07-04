@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:karetaker/Presentation/nav/features/appointment/doctors-page.dart';
 import 'package:karetaker/constants/strings.dart';
-import 'package:karetaker/data/models/doctor.dart';
-import 'package:karetaker/data/provider/search_api.dart';
+import 'package:karetaker/data/models/search_doctor.dart';
 import 'package:karetaker/data/repositories/search_repo.dart';
 
 class AppointmentSearch extends StatefulWidget {
@@ -12,7 +12,7 @@ class AppointmentSearch extends StatefulWidget {
 }
 
 class _AppointmentSearchState extends State<AppointmentSearch> {
-  TextEditingController textEditingController = TextEditingController();
+  SearchRepo _searchRepo = SearchRepo();
   var future;
 
   @override
@@ -24,13 +24,13 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            searchField(textEditingController),
+            searchField(),
             StreamBuilder(
-                stream: Stream.fromFuture(SearchRepo().search(keyword: future)),
+                stream: Stream.fromFuture(_searchRepo.search(keyword: future)),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData) {
-                    var doctors = snapshot.data as List<Doctor>;
+                    var doctors = snapshot.data as List<SearchDoctor>;
                     return buildDoctorCards(docs: doctors);
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
@@ -47,26 +47,99 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
     );
   }
 
-  @override
-  void dispose() {
-    textEditingController.dispose();
-    super.dispose();
-  }
-
-  buildDoctorCards({required List<Doctor> docs}) {
+  buildDoctorCards({required List<SearchDoctor> docs}) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: docs.length,
         itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(
-                docs[index].firstName.toString() +
-                    ' ' +
-                    docs[index].lastName.toString(),
+          return Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(color: Colors.grey, blurRadius: 2, spreadRadius: 1)
+                ],
               ),
-            ),
-          );
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    width: 5,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color(PRIMARY_COLOR),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 16, top: 20, bottom: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Dr. ' +
+                                docs[index].firstName.toString() +
+                                ' ' +
+                                docs[index].lastName.toString(),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 3, bottom: 12),
+                            child: Text(
+                              docs[index]
+                                  .specialities!
+                                  .specialityName
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text('Practicing for '),
+                              Text(
+                                docs[index].practicingYears.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(' years')
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 8, right: 14),
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        // Uncomment it if you want to open the doctor's page and then when you hit back, come back to the
+                        // home screen instead of going to Appointment Search Page.
+                        // Navigator.pop(context),
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DoctorPage(doctor: docs[index])),
+                        ),
+                      },
+                      child: Text('Book Appointment'),
+                    ),
+                  ),
+                ],
+              ));
         });
   }
 
@@ -175,7 +248,7 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
     );
   }
 
-  Padding searchField(TextEditingController textEditingController) {
+  Padding searchField() {
     return Padding(
       padding: EdgeInsets.all(16),
       child: TextField(
@@ -185,7 +258,6 @@ class _AppointmentSearchState extends State<AppointmentSearch> {
           });
         },
         style: TextStyle(fontSize: 18),
-        controller: textEditingController,
         maxLines: 1,
         autofocus: false,
         decoration: InputDecoration(
