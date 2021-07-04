@@ -41,6 +41,11 @@ const CREATE_BLOODPRESSURE_READING = BASE_URL + '/users/bloodpressure';
 // Route to create new Heart Rate reading
 const CREATE_HEARTRATE_READING = BASE_URL + '/users/heartrate';
 
+//* Blogs
+const GET_RANDOM_BLOGS = BASE_URL + '/blogs/getblogs/';
+const SEARCH_BLOGS = BASE_URL + '/blogs/search/';
+const GET_BLOG_BY_ID = BASE_URL + '/blogs/getblogsbyid/';
+
 //* Gender
 const List<String> GENDER_SELECT = ['Male', 'Female', 'Others'];
 const GENDER_SELECT_VALUES = ['MALE', 'FEMALE', 'OTHERS'];
