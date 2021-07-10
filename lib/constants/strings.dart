@@ -29,6 +29,8 @@ const GET_APPOINTMENTS_OF_USER = BASE_URL + '/appointments/appointmentbyid/';
 // Route used to update the user booked status to cancelled by user.
 const UPDATE_USER_STATUS = BASE_URL + '/appointments/appointmentbyid/';
 
+//* Reports
+
 // Route to get all the user reports
 const GET_USER_REPORTS = BASE_URL + '/users/reports/getreportsbyuser/';
 

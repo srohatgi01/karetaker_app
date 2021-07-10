@@ -51,5 +51,6 @@ class Reports {
         "doctor_who_created_report":
             doctorWhoCreatedReport == null ? null : doctorWhoCreatedReport,
         "show_status": showStatus == null ? null : showStatus,
+        "timestamp": timestamp == null ? null : timestamp!.toIso8601String(),
       };
 }
